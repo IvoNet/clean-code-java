@@ -23,7 +23,7 @@ class DiscountServiceTest {
         final BigDecimal discount = BigDecimal.valueOf(0.2);
 
         //when
-        final BigDecimal result = this.sut.applyDiscount(amount, DiscountType.PERCENTAGE, discount);
+        final BigDecimal result = this.sut.applyDiscount(amount, new PercentageDiscount(discount));
 
         //then
         assertThat(result).isEqualByComparingTo("80");
@@ -37,7 +37,7 @@ class DiscountServiceTest {
 
         //when
         try {
-            this.sut.applyDiscount(amount, DiscountType.PERCENTAGE, discount);
+            this.sut.applyDiscount(amount, new PercentageDiscount(discount));
         } catch (final IllegalArgumentException e) {
             //then
             assertThat(e).hasMessage("A percentaqge discount should be between 0.0 and 1.0");
@@ -51,7 +51,7 @@ class DiscountServiceTest {
         final BigDecimal discount = BigDecimal.valueOf(10);
 
         //when
-        final BigDecimal result = this.sut.applyDiscount(amount, DiscountType.ABSOLUTE, discount);
+        final BigDecimal result = this.sut.applyDiscount(amount, new AbsoluteDiscount(discount));
 
         //then
         assertThat(result).isEqualByComparingTo("90");
@@ -65,7 +65,7 @@ class DiscountServiceTest {
 
         //when
         try {
-            this.sut.applyDiscount(amount, DiscountType.ABSOLUTE, discount);
+            this.sut.applyDiscount(amount, new AbsoluteDiscount(discount));
         } catch (final IllegalArgumentException e) {
             //then
             assertThat(e).hasMessage("An absolute discount should be positive");
@@ -78,7 +78,7 @@ class DiscountServiceTest {
         final BigDecimal amount = BigDecimal.valueOf(100);
 
         //when
-        final BigDecimal result = this.sut.applyDiscount(amount, DiscountType.NONE, BigDecimal.ZERO);
+        final BigDecimal result = this.sut.applyDiscount(amount, new NoneDiscount());
 
         //then
         assertThat(result).isEqualByComparingTo("100");
@@ -90,7 +90,7 @@ class DiscountServiceTest {
         final BigDecimal amount = BigDecimal.valueOf(100);
 
         //when
-        final BigDecimal result = this.sut.applyDiscount(amount, null, BigDecimal.ZERO);
+        final BigDecimal result = this.sut.applyDiscount(amount, null);
 
         //then
         assertThat(result).isEqualByComparingTo("100");
